@@ -54,13 +54,14 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import ActividadForm from './ActividadForm.vue'
+import { API_URL } from '../api'  // Ajusta ruta según tu estructura
 
 const actividades = ref([])
 const actividadSeleccionada = ref(null)
 
 async function cargarActividades() {
   try {
-    const response = await axios.get('/actividades')
+    const response = await axios.get(`${API_URL}/actividades`)
     actividades.value = response.data
   } catch (error) {
     alert('Error al cargar actividades')
@@ -94,7 +95,7 @@ function onActividadGuardada() {
 async function eliminar(id) {
   if (confirm('¿Seguro que quieres eliminar esta actividad?')) {
     try {
-      await axios.delete(`/actividades/${id}`)
+      await axios.delete(`${API_URL}/actividades/${id}`)
       cargarActividades()
     } catch (error) {
       alert('No se pudo eliminar la actividad.')

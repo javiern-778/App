@@ -70,6 +70,7 @@
 <script setup>
 import { reactive, watch } from 'vue'
 import axios from 'axios'
+import { API_URL } from '../api'  // Ajusta ruta según tu estructura
 
 const props = defineProps({
   initialEvaluacion: {
@@ -128,9 +129,9 @@ async function submitForm() {
 
   try {
     if (evaluacion.id) {
-      await axios.put(`/evaluaciones/${evaluacion.id}`, evaluacion)
+      await axios.put(`${API_URL}/evaluaciones/${evaluacion.id}`, evaluacion)
     } else {
-      await axios.post('/evaluaciones', evaluacion)
+      await axios.post(`${API_URL}/evaluaciones`, evaluacion)
     }
     emit('saved')
   } catch (error) {
@@ -139,14 +140,13 @@ async function submitForm() {
   }
 }
 
-// ✅ Función para eliminar
 async function eliminarEvaluacion() {
   const confirmacion = confirm('¿Estás seguro de que deseas eliminar esta evaluación?')
   if (!confirmacion) return
 
   try {
-    await axios.delete(`/evaluaciones/${evaluacion.id}`)
-    emit('saved') // Puedes emitir para actualizar la lista
+    await axios.delete(`${API_URL}/evaluaciones/${evaluacion.id}`)
+    emit('saved') // Para actualizar la lista luego de eliminar
   } catch (error) {
     alert('Error al eliminar la evaluación')
     console.error(error)

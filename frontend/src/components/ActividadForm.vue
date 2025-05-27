@@ -8,7 +8,7 @@
           type="text"
           id="descripcion"
           v-model.trim="actividad.descripcion"
-          :class="{'is-invalid': errores.descripcion}"
+          :class="{ 'is-invalid': errores.descripcion }"
           class="form-control"
           placeholder="Descripción de la actividad"
         />
@@ -22,7 +22,7 @@
             type="date"
             id="fechaInicio"
             v-model="actividad.fechaInicio"
-            :class="{'is-invalid': errores.fechaInicio}"
+            :class="{ 'is-invalid': errores.fechaInicio }"
             class="form-control"
           />
           <div class="invalid-feedback">{{ errores.fechaInicio }}</div>
@@ -33,7 +33,7 @@
             type="date"
             id="fechaFin"
             v-model="actividad.fechaFin"
-            :class="{'is-invalid': errores.fechaFin}"
+            :class="{ 'is-invalid': errores.fechaFin }"
             class="form-control"
           />
           <div class="invalid-feedback">{{ errores.fechaFin }}</div>
@@ -46,7 +46,7 @@
           type="text"
           id="estado"
           v-model.trim="actividad.estado"
-          :class="{'is-invalid': errores.estado}"
+          :class="{ 'is-invalid': errores.estado }"
           class="form-control"
           placeholder="Estado de la actividad"
         />
@@ -74,6 +74,7 @@
 <script setup>
 import { reactive, watch } from 'vue'
 import axios from 'axios'
+import { API_URL } from '../api' // Ajusta la ruta según tu proyecto
 
 const props = defineProps({
   initialActividad: {
@@ -109,27 +110,21 @@ function validar() {
   errores.fechaFin = actividad.fechaFin ? '' : 'La fecha de fin es obligatoria.'
   errores.estado = actividad.estado ? '' : 'El estado es obligatorio.'
 
-  // Validar fechas coherentes
-  if (actividad.fechaInicio && actividad.fechaFin) {
-    if (actividad.fechaFin < actividad.fechaInicio) {
-      errores.fechaFin = 'La fecha de fin debe ser igual o posterior a la fecha de inicio.'
-    }
+  if (actividad.fechaInicio && actividad.fechaFin && actividad.fechaFin < actividad.fechaInicio) {
+    errores.fechaFin = 'La fecha de fin debe ser igual o posterior a la fecha de inicio.'
   }
 
-  // Devuelve true si no hay errores
   return !Object.values(errores).some(error => error.length > 0)
 }
 
 async function submitForm() {
-  if (!validar()) {
-    return
-  }
+  if (!validar()) return
 
   try {
     if (actividad.id) {
-      await axios.put(`/actividades/${actividad.id}`, actividad)
+      await axios.put(`${API_URL}/actividades/${actividad.id}`, actividad)
     } else {
-      await axios.post('/actividades', actividad)
+      await axios.post(`${API_URL}/actividades`, actividad)
     }
     emit('saved')
   } catch (error) {
