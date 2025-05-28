@@ -1,24 +1,29 @@
-// backend/index.js
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 
-// Permitir peticiones desde otros orígenes (por ejemplo, tu frontend en localhost o Render)
-const cors = require('cors');
 app.use(cors());
+app.use(express.json()); // <- para leer JSON del body
 
-// Ruta raíz
 app.get('/', (req, res) => {
   res.send('¡Backend funcionando en Render!');
 });
 
-// Ruta /perfiles
 app.get('/perfiles', (req, res) => {
   res.json([
     { id: 1, nombre: 'Administrador' },
     { id: 2, nombre: 'Docente' },
     { id: 3, nombre: 'Residente' }
   ]);
+});
+
+app.post('/perfiles', (req, res) => {
+  const nuevoPerfil = req.body;
+  console.log('Perfil recibido:', nuevoPerfil);
+  // Aquí podrías guardar el perfil en DB, etc.
+
+  res.status(201).json({ mensaje: 'Perfil registrado', perfil: nuevoPerfil });
 });
 
 app.listen(PORT, () => {
