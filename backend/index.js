@@ -4,7 +4,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json()); // <- para leer JSON del body
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('¡Backend funcionando en Render!');
@@ -21,9 +21,14 @@ app.get('/perfiles', (req, res) => {
 app.post('/perfiles', (req, res) => {
   const nuevoPerfil = req.body;
   console.log('Perfil recibido:', nuevoPerfil);
-  // Aquí podrías guardar el perfil en DB, etc.
-
   res.status(201).json({ mensaje: 'Perfil registrado', perfil: nuevoPerfil });
+});
+
+// 👇 Nueva ruta agregada
+app.post('/usuarios', (req, res) => {
+  const nuevoUsuario = req.body;
+  console.log('Usuario recibido:', nuevoUsuario);
+  res.status(201).json({ mensaje: 'Usuario registrado', usuario: nuevoUsuario });
 });
 
 app.listen(PORT, () => {

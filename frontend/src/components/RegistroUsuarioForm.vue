@@ -94,6 +94,7 @@
 <script setup>
 import { reactive } from 'vue'
 import axios from 'axios'
+import { API_URL } from '../api' // Asegúrate de que esta ruta sea correcta
 
 const usuario = reactive({
   nombreCompleto: '',
@@ -127,9 +128,7 @@ function handleFileUpload(event) {
 }
 
 function validar() {
-  // Limpiar errores previos
   Object.keys(errores).forEach(key => errores[key] = '')
-
   let valido = true
 
   if (!usuario.nombreCompleto.trim()) {
@@ -182,9 +181,8 @@ async function submitForm() {
   if (!validar()) return
 
   try {
-    await axios.post('/usuarios', usuario)
+    await axios.post(`${API_URL}/usuarios`, usuario)
     alert('Usuario registrado')
-    // Limpiar formulario tras guardar
     Object.keys(usuario).forEach(key => usuario[key] = key === 'fotoPerfil' ? null : '')
   } catch (error) {
     console.error('Error al registrar usuario:', error)
