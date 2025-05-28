@@ -1,9 +1,14 @@
 // api.js
-import axios from 'axios'
+// frontend/src/api.js
+import axios from 'axios';
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API = axios.create({
+baseURL: import.meta.env.VITE_API_URL,
+baseURL,
+});
 
-export const API = axios.create({
-baseURL: 'https://app-1-6nr0.onrender.com'
-})
+
+export default API;
 
 
 // export const API_URL = import.meta.env.VITE_API_URL;
