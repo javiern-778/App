@@ -36,7 +36,10 @@
 import { ref, onMounted } from 'vue'
 import { API } from '../api.js'
 import RegistroUsuarioForm from './RegistroUsuarioForm.vue'
-import { API_URL } from '../api.js' // o la ruta que estés usando
+import { API } from '../api.js'
+
+API.get('/perfiles')
+
 
 
 const usuarios = ref([])
