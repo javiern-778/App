@@ -94,7 +94,7 @@
 <script setup>
 import { reactive } from 'vue'
 import axios from 'axios'
-import { API_URL } from '../api' // Asegúrate de que esta ruta sea correcta
+import { API_URL } from '../api.js' // Asegúrate de que esta ruta sea correcta
 
 const usuario = reactive({
   nombreCompleto: '',
