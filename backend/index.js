@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
   res.send('¡Backend funcionando en Render!');
 });
 
-app.get('/perfiles', (req, res) => {
+app.get("/perfiles", (req, res) => {
   res.json([
     { id: 1, nombre: 'Administrador' },
     { id: 2, nombre: 'Docente' },
@@ -18,18 +18,30 @@ app.get('/perfiles', (req, res) => {
   ]);
 });
 
-app.post('/perfiles', (req, res) => {
+app.post("/perfiles", (req, res) => {
   const nuevoPerfil = req.body;
   console.log('Perfil recibido:', nuevoPerfil);
   res.status(201).json({ mensaje: 'Perfil registrado', perfil: nuevoPerfil });
 });
 
 // 👇 Nueva ruta agregada
-app.post('/usuarios', (req, res) => {
-  const nuevoUsuario = req.body;
-  console.log('Usuario recibido:', nuevoUsuario);
-  res.status(201).json({ mensaje: 'Usuario registrado', usuario: nuevoUsuario });
+app.get("/evaluaciones", (req, res) => {
+  // Aquí normalmente obtendrías datos de una base de datos
+  res.json([
+    { id: 1, evaluador: "Docente 1", resultado: "Aprobado" },
+    { id: 2, evaluador: "Docente 2", resultado: "Pendiente" }
+  ]);
 });
+
+app.post("/evaluaciones", (req, res) => {
+  const nuevaEvaluacion = req.body;
+  console.log('Evaluación recibida:', nuevaEvaluacion);
+
+  // Aquí normalmente guardarías la evaluación en la base de datos
+
+  res.status(201).json({ mensaje: 'Evaluación registrada', evaluacion: nuevaEvaluacion });
+});
+
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en puerto ${PORT}`);
