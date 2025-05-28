@@ -75,6 +75,9 @@
 import { reactive, watch } from 'vue'
 import axios from 'axios'
 import { API_URL } from '../api' // Ajusta la ruta según tu proyecto
+import { db } from '@/firebase'
+import { addDoc, updateDoc, doc, collection } from 'firebase/firestore'
+
 
 const props = defineProps({
   initialActividad: {
@@ -122,10 +125,24 @@ async function submitForm() {
 
   try {
     if (actividad.id) {
-      await axios.put(`${API_URL}/actividades/${actividad.id}`, actividad)
-    } else {
-      await axios.post(`${API_URL}/actividades`, actividad)
-    }
+  const docRef = doc(db, 'actividades', actividad.id)
+  await updateDoc(docRef, {
+    descripcion: actividad.descripcion,
+    fechaInicio: actividad.fechaInicio,
+    fechaFin: actividad.fechaFin,
+    estado: actividad.estado,
+    comentarios: actividad.comentarios,
+  })
+} else {
+  await addDoc(collection(db, 'actividades'), {
+    descripcion: actividad.descripcion,
+    fechaInicio: actividad.fechaInicio,
+    fechaFin: actividad.fechaFin,
+    estado: actividad.estado,
+    comentarios: actividad.comentarios,
+  })
+}
+
     emit('saved')
   } catch (error) {
     alert('Error al guardar la actividad')

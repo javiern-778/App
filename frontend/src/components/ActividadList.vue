@@ -55,19 +55,26 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import ActividadForm from './ActividadForm.vue'
 import { API_URL } from '../api'  // Ajusta ruta según tu estructura
+import { db } from '@/firebase' // Asegúrate de tener firebase.js con esta exportación
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'
+
 
 const actividades = ref([])
 const actividadSeleccionada = ref(null)
 
 async function cargarActividades() {
   try {
-    const response = await axios.get(`${API_URL}/actividades`)
-    actividades.value = response.data
+    const snapshot = await getDocs(collection(db, 'actividades'))
+    actividades.value = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
   } catch (error) {
     alert('Error al cargar actividades')
     console.error(error)
   }
 }
+
 
 function crearNueva() {
   actividadSeleccionada.value = {
@@ -95,7 +102,7 @@ function onActividadGuardada() {
 async function eliminar(id) {
   if (confirm('¿Seguro que quieres eliminar esta actividad?')) {
     try {
-      await axios.delete(`${API_URL}/actividades/${id}`)
+      await deleteDoc(doc(db, 'actividades', id))
       cargarActividades()
     } catch (error) {
       alert('No se pudo eliminar la actividad.')
@@ -103,6 +110,7 @@ async function eliminar(id) {
     }
   }
 }
+
 
 onMounted(() => {
   cargarActividades()
