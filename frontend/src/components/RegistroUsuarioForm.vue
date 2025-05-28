@@ -93,8 +93,9 @@
 
 <script setup>
 import { reactive } from 'vue'
-import axios from 'axios'
-import { API_URL } from '../api.js' // Asegúrate de que esta ruta sea correcta
+import { API } from '../api.js'
+
+
 
 const usuario = reactive({
   nombreCompleto: '',
@@ -181,7 +182,7 @@ async function submitForm() {
   if (!validar()) return
 
   try {
-    await axios.post(`${API_URL}/usuarios`, usuario)
+    await API.post('/usuarios', usuario)
     alert('Usuario registrado')
     Object.keys(usuario).forEach(key => usuario[key] = key === 'fotoPerfil' ? null : '')
   } catch (error) {

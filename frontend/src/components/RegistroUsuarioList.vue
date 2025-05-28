@@ -34,8 +34,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import { API } from '../api.js'
 import RegistroUsuarioForm from './RegistroUsuarioForm.vue'
+import { API_URL } from '../api.js' // o la ruta que estés usando
+
 
 const usuarios = ref([])
 const editando = ref(false)
@@ -43,7 +45,7 @@ const usuarioEditado = ref(null)
 
 const cargarUsuarios = async () => {
   try {
-    const res = await axios.get('/usuarios')
+    const res = await API.get('/usuarios')
     usuarios.value = res.data
   } catch (e) {
     console.error('Error al cargar usuarios:', e)
@@ -58,7 +60,7 @@ const editarUsuario = (usuario) => {
 const eliminarUsuario = async (id) => {
   if (!confirm('¿Estás seguro de que deseas eliminar este usuario?')) return
   try {
-    await axios.delete(`/usuarios/${id}`)
+    await API.delete(`/usuarios/${id}`)
     await cargarUsuarios()
   } catch (e) {
     console.error('Error al eliminar usuario:', e)
